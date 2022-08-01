@@ -2,5 +2,14 @@
   "tabWidth": 2,
   "useTabs": false,
   "semi": true,
-  "singleQuote": false
+  "singleQuote": false,
+  "trailingComma": "all",
+  "importOrder": [
+    "^@assets/(.*)$",
+    "^@lib/(.*)$",
+    "^@component/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }
