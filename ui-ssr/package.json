@@ -1,8 +1,11 @@
 {
   "name": "ui",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
-    "dev": "vite dev",
+    "dev": "vite dev --host --clearScreen false",
     "build": "vite build",
     "package": "svelte-kit package",
     "preview": "vite preview",
