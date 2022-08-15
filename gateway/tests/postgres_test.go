@@ -14,12 +14,14 @@ func TestPostgresCRUD(t *testing.T) {
 	cfg, err := loadTestConfig()
 	require.NoError(t, err)
 
-	cli, err := postgres.NewClient(cfg.Postgres)
+	var cli *postgres.Client
+	cli, err = postgres.NewClient(cfg.Postgres)
 	require.NoError(t, err)
-	userRepo := postgres.NewUserRepository(cli)
 
-	err = cli.MigrateSchema()
+	err = cli.MigrateSchema(context.Background())
 	require.NoError(t, err)
+
+	var userRepo = postgres.NewUserRepository(cli)
 
 	ctxWithTx, commit, _ := cli.BeginTx(context.Background())
 

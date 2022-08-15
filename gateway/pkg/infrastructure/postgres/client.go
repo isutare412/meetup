@@ -28,10 +28,28 @@ func NewClient(cfg *config.PostgresConfig) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) MigrateSchema() error {
-	return c.db.AutoMigrate(
-		&domain.User{},
-	)
+func (c *Client) MigrateSchema(ctx context.Context) error {
+	success := make(chan struct{})
+	fails := make(chan error, 1)
+	go func() {
+		err := c.db.AutoMigrate(
+			&domain.User{},
+		)
+		if err != nil {
+			fails <- err
+			return
+		}
+		close(success)
+	}()
+
+	select {
+	case <-ctx.Done():
+		return fmt.Errorf("time out while schema migration")
+	case err := <-fails:
+		return err
+	case <-success:
+	}
+	return nil
 }
 
 func (c *Client) BeginTx(ctx context.Context, opts ...*sql.TxOptions) (

@@ -1,19 +1,21 @@
 package http
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/isutare412/meetup/gateway/pkg/config"
+	"github.com/isutare412/meetup/gateway/pkg/core/port"
 )
 
 type Server struct {
 	srv *http.Server
 }
 
-func NewServer(cfg *config.HTTPServerConfig) *Server {
+func NewServer(cfg *config.HTTPServerConfig, uSvc port.UserService) *Server {
 	gin.SetMode(gin.ReleaseMode)
 	root := gin.New()
 
@@ -29,6 +31,10 @@ func NewServer(cfg *config.HTTPServerConfig) *Server {
 	}
 }
 
+func (s *Server) Addr() string {
+	return s.srv.Addr
+}
+
 func (s *Server) Run() <-chan error {
 	fails := make(chan error, 1)
 	go func() {
@@ -38,4 +44,8 @@ func (s *Server) Run() <-chan error {
 		}
 	}()
 	return fails
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	return s.srv.Shutdown(ctx)
 }

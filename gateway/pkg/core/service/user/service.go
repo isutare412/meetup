@@ -14,6 +14,13 @@ type Service struct {
 	userRepo    port.UserRepository
 }
 
+func NewService(repoSession port.RepositorySession, userRepo port.UserRepository) *Service {
+	return &Service{
+		repoSession: repoSession,
+		userRepo:    userRepo,
+	}
+}
+
 func (s *Service) Create(ctx context.Context, req *dto.CreateUserReq) (user *domain.User, err error) {
 	if err := req.IsValid(); err != nil {
 		return nil, err
