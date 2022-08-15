@@ -23,7 +23,8 @@ func TestPostgresCRUD(t *testing.T) {
 
 	ctxWithTx, commit, _ := cli.BeginTx(context.Background())
 
-	var user = domain.User{Nickname: "redshore"}
+	userName := "redshore"
+	var user = domain.User{Nickname: &userName}
 	err = userRepo.Create(ctxWithTx, &user)
 	require.NoError(t, err)
 	require.NotZero(t, user.ID)
