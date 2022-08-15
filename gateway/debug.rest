@@ -1,0 +1,6 @@
+@url=http://localhost:28420
+
+###
+# Playground
+###
+GET {{url}}/api/v1/playground/foo

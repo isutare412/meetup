@@ -3,6 +3,6 @@ package config
 type LogFormat string
 
 const (
-	LogFormatJson = "json"
-	LogFormatText = "text"
+	LogFormatJson LogFormat = "json"
+	LogFormatText LogFormat = "text"
 )

@@ -1,6 +1,10 @@
 logger:
   format: text
   stackTrace: false
+server:
+  http:
+    host: '0.0.0.0'
+    port: 28420
 postgres:
   host: localhost
   port: 5432
