@@ -1,7 +1,13 @@
 package config
 
 type Config struct {
+	Logger   *LoggerConfig   `yaml:"logger"`
 	Postgres *PostgresConfig `yaml:"postgres"`
+}
+
+type LoggerConfig struct {
+	Format     LogFormat `yaml:"format"`
+	StackTrace bool      `yaml:"stackTrace"`
 }
 
 type PostgresConfig struct {
