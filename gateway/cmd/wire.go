@@ -20,6 +20,8 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 	success := make(chan *components, 1)
 	fails := make(chan error, 1)
 	go func() {
+		logger.S().Info("Start dependency injection")
+
 		var pgClient *postgres.Client
 		pgClient, err := postgres.NewClient(cfg.Postgres)
 		if err != nil {
@@ -32,6 +34,7 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 
 		var httpServer = http.NewServer(cfg.Server.HTTP, userService)
 
+		logger.S().Info("Done dependency injection")
 		success <- &components{
 			pgClient:   pgClient,
 			httpServer: httpServer,
@@ -50,9 +53,14 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 }
 
 func (c *components) init(ctx context.Context) error {
+	logger.S().Info("Start component initialization")
+
 	if err := c.pgClient.MigrateSchema(ctx); err != nil {
 		return err
 	}
+	logger.S().Info("Migrated database schema")
+
+	logger.S().Info("Done component initialization")
 	return nil
 }
 
@@ -60,7 +68,7 @@ func (c *components) run(ctx context.Context) <-chan error {
 	failMux := make(chan error)
 	go func() {
 		httpServerFails := c.httpServer.Run()
-		logger.S().Infof("Run http server from %s", c.httpServer.Addr())
+		logger.S().Infof("Run http server at %s", c.httpServer.Addr())
 
 		select {
 		case err := <-httpServerFails:
@@ -71,7 +79,11 @@ func (c *components) run(ctx context.Context) <-chan error {
 }
 
 func (c *components) shutdown(ctx context.Context) {
+	logger.S().Info("Start graceful shutdown")
+
 	if err := c.httpServer.Shutdown(ctx); err != nil {
 		logger.S().Errorf("Error while shutting down http server: %v", err)
 	}
+
+	logger.S().Info("Done graceful shutdown")
 }

@@ -1,3 +1,6 @@
+timeout:
+  startup: 60s
+  shutdown: 60s
 logger:
   format: text
   stackTrace: false

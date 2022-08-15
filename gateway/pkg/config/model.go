@@ -1,9 +1,17 @@
 package config
 
+import "time"
+
 type Config struct {
+	Timeout  *TimeoutConfig  `yaml:"timeout"`
 	Logger   *LoggerConfig   `yaml:"logger"`
 	Server   *ServerConfig   `yaml:"server"`
 	Postgres *PostgresConfig `yaml:"postgres"`
+}
+
+type TimeoutConfig struct {
+	Startup  time.Duration `yaml:"startup"`
+	Shutdown time.Duration `yaml:"shutdown"`
 }
 
 type LoggerConfig struct {

@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/isutare412/meetup/gateway/pkg/config"
 	"github.com/isutare412/meetup/gateway/pkg/logger"
@@ -26,7 +25,7 @@ func main() {
 	logger.Init(cfg.Logger)
 	defer logger.Sync()
 
-	startupCtx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	startupCtx, cancel := context.WithTimeout(context.Background(), cfg.Timeout.Startup)
 	defer cancel()
 
 	var comp *components
@@ -39,7 +38,8 @@ func main() {
 		logger.S().Fatalf("Initializing components: %v", err)
 	}
 
-	runFails := comp.run(context.Background())
+	runCtx := context.Background()
+	runFails := comp.run(runCtx)
 
 	signals := make(chan os.Signal, 3)
 	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
@@ -50,7 +50,7 @@ func main() {
 		logger.S().Error("Error while running components: %v", err)
 	}
 
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 1*time.Minute)
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), cfg.Timeout.Shutdown)
 	defer cancel()
 
 	comp.shutdown(shutdownCtx)
