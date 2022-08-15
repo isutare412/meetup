@@ -1,0 +1,2 @@
+postgres:
+  addr: localhost:5432
