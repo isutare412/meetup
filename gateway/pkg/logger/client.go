@@ -65,7 +65,7 @@ func textLoggerConfig() zap.Config {
 func jsonLoggerConfig() zap.Config {
 	cfg := zap.NewProductionConfig()
 	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	cfg.EncoderConfig.FunctionKey = "func"
+	cfg.EncoderConfig.FunctionKey = zapcore.OmitKey
 	return cfg
 }
 
