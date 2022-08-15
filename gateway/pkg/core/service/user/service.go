@@ -6,7 +6,7 @@ import (
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
 	"github.com/isutare412/meetup/gateway/pkg/core/dto"
 	"github.com/isutare412/meetup/gateway/pkg/core/port"
-	perror "github.com/isutare412/meetup/gateway/pkg/error"
+	pkgerr "github.com/isutare412/meetup/gateway/pkg/error"
 )
 
 type Service struct {
@@ -20,7 +20,7 @@ func (s *Service) Create(ctx context.Context, req *dto.CreateUserReq) (user *dom
 	}
 
 	ctxWithTx, commit, rollback := s.repoSession.BeginTx(ctx)
-	defer func() { err = perror.TryRollback(err, rollback) }()
+	defer func() { err = pkgerr.TryRollback(err, rollback) }()
 
 	user = req.IntoUser()
 	if err := s.userRepo.Create(ctxWithTx, user); err != nil {

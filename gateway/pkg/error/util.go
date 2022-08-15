@@ -1,4 +1,4 @@
-package perror
+package pkgerr
 
 import "fmt"
 
