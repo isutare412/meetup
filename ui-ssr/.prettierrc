@@ -5,7 +5,7 @@
   "singleQuote": true,
   "trailingComma": "all",
   "printWidth": 100,
-  "importOrder": ["\\$lib/(.*)", "^[./]"],
+  "importOrder": ["\\$app/(.*)", "\\$lib/(.*)", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }
