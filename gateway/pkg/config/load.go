@@ -7,10 +7,10 @@ import (
 )
 
 func Load(path string) (*Config, error) {
-	if err := readFromFile(path); err != nil {
+	if err := readFile(path); err != nil {
 		return nil, err
 	}
-	readFromEnv()
+	readEnv()
 
 	var cfg Config
 	if err := viper.Unmarshal(&cfg); err != nil {
@@ -19,7 +19,7 @@ func Load(path string) (*Config, error) {
 	return &cfg, nil
 }
 
-func readFromFile(path string) error {
+func readFile(path string) error {
 	viper.SetConfigFile(path)
 	if err := viper.ReadInConfig(); err != nil {
 		return err
@@ -27,7 +27,7 @@ func readFromFile(path string) error {
 	return nil
 }
 
-func readFromEnv() {
+func readEnv() {
 	viper.SetEnvPrefix("gateway")
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

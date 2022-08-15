@@ -1,6 +1,7 @@
 package config
 
 import (
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -8,23 +9,23 @@ import (
 )
 
 func TestLoadFromFile(t *testing.T) {
-	cfg, err := Load("sample/config.yaml")
+	cfg, err := Load("../../configs/local/config.yaml")
 	require.NoError(t, err)
 
 	require.NotNil(t, cfg.Postgres)
-	assert.NotEmpty(t, cfg.Postgres.Addr)
+	assert.NotEmpty(t, cfg.Postgres.Host)
 }
 
 func TestOverrideFromEnv(t *testing.T) {
 	const (
-		postgresAddr = "localhost:15932"
+		postgresPort = 15932
 	)
 
-	t.Setenv("GATEWAY_POSTGRES_ADDR", postgresAddr)
+	t.Setenv("GATEWAY_POSTGRES_PORT", strconv.Itoa(postgresPort))
 
-	cfg, err := Load("sample/config.yaml")
+	cfg, err := Load("../../configs/local/config.yaml")
 	require.NoError(t, err)
 
 	require.NotNil(t, cfg.Postgres)
-	assert.Equal(t, cfg.Postgres.Addr, postgresAddr)
+	assert.Equal(t, postgresPort, cfg.Postgres.Port)
 }

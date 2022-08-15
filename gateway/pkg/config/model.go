@@ -5,5 +5,9 @@ type Config struct {
 }
 
 type PostgresConfig struct {
-	Addr string `yaml:"addr"`
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Database string `yaml:"database"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
 }
