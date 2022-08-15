@@ -7,6 +7,7 @@ import (
 
 	"github.com/isutare412/meetup/gateway/pkg/config"
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
+	"github.com/isutare412/meetup/gateway/pkg/logger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -18,7 +19,9 @@ type Client struct {
 func NewClient(cfg *config.PostgresConfig) (*Client, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.NewGORM(),
+	})
 	if err != nil {
 		return nil, err
 	}
