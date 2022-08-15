@@ -20,7 +20,7 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 	success := make(chan *components, 1)
 	fails := make(chan error, 1)
 	go func() {
-		logger.S().Info("Start dependency injection")
+		logger.S().Info("Dependency injection start")
 
 		var pgClient *postgres.Client
 		pgClient, err := postgres.NewClient(cfg.Postgres)
@@ -34,7 +34,7 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 
 		var httpServer = http.NewServer(cfg.Server.HTTP, userService)
 
-		logger.S().Info("Done dependency injection")
+		logger.S().Info("Dependency injection complete")
 		success <- &components{
 			pgClient:   pgClient,
 			httpServer: httpServer,
@@ -53,14 +53,14 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 }
 
 func (c *components) init(ctx context.Context) error {
-	logger.S().Info("Start component initialization")
+	logger.S().Info("Component initialization start")
 
 	if err := c.pgClient.MigrateSchema(ctx); err != nil {
 		return err
 	}
-	logger.S().Info("Migrated database schema")
+	logger.S().Info("DB schema migration complete")
 
-	logger.S().Info("Done component initialization")
+	logger.S().Info("Component initialization complete")
 	return nil
 }
 
@@ -79,11 +79,11 @@ func (c *components) run(ctx context.Context) <-chan error {
 }
 
 func (c *components) shutdown(ctx context.Context) {
-	logger.S().Info("Start graceful shutdown")
+	logger.S().Info("Graceful shutdown start")
 
 	if err := c.httpServer.Shutdown(ctx); err != nil {
 		logger.S().Errorf("Error while shutting down http server: %v", err)
 	}
 
-	logger.S().Info("Done graceful shutdown")
+	logger.S().Info("Graceful shutdown complete")
 }
