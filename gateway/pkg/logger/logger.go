@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	fastLogger   *zap.Logger
-	slowLogger   *zap.SugaredLogger
-	accessLogger *zap.Logger
+	fastLogger   *zap.Logger        = zap.NewNop()
+	slowLogger   *zap.SugaredLogger = zap.NewNop().Sugar()
+	accessLogger *zap.Logger        = zap.NewNop()
 )
 
 func Init(cfg *config.LoggerConfig) error {
