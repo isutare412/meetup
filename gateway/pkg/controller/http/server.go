@@ -18,6 +18,7 @@ type Server struct {
 func NewServer(cfg *config.HTTPServerConfig, uSvc port.UserService) *Server {
 	gin.SetMode(gin.ReleaseMode)
 	root := gin.New()
+	root.Use(recovery)
 
 	api := root.Group("/api/v1")
 	api.Use(accessLog)
