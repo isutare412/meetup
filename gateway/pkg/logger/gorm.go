@@ -10,43 +10,43 @@ import (
 	glog "gorm.io/gorm/logger"
 )
 
-type gormLogger struct {
+type GORM struct {
 	Level         glog.LogLevel
 	SlowThreshold time.Duration
 }
 
-func NewGORM() *gormLogger {
-	return &gormLogger{
-		Level:         glog.Error,
+func NewGORM(level glog.LogLevel) *GORM {
+	return &GORM{
+		Level:         level,
 		SlowThreshold: 200 * time.Millisecond,
 	}
 }
 
-func (l *gormLogger) LogMode(level glog.LogLevel) glog.Interface {
+func (l *GORM) LogMode(level glog.LogLevel) glog.Interface {
 	newLogger := *l
 	newLogger.Level = level
 	return &newLogger
 }
 
-func (l *gormLogger) Info(_ context.Context, msg string, args ...interface{}) {
+func (l *GORM) Info(_ context.Context, msg string, args ...interface{}) {
 	if l.Level >= glog.Info {
 		l.base().Infof(msg, args...)
 	}
 }
 
-func (l *gormLogger) Warn(_ context.Context, msg string, args ...interface{}) {
+func (l *GORM) Warn(_ context.Context, msg string, args ...interface{}) {
 	if l.Level >= glog.Warn {
 		l.base().Warnf(msg, args...)
 	}
 }
 
-func (l *gormLogger) Error(_ context.Context, msg string, args ...interface{}) {
+func (l *GORM) Error(_ context.Context, msg string, args ...interface{}) {
 	if l.Level >= glog.Error {
 		l.base().Errorf(msg, args...)
 	}
 }
 
-func (l *gormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
+func (l *GORM) Trace(ctx context.Context, begin time.Time, fc func() (sql string, rowsAffected int64), err error) {
 	if l.Level <= glog.Silent {
 		return
 	}
@@ -95,6 +95,6 @@ func (l *gormLogger) Trace(ctx context.Context, begin time.Time, fc func() (sql 
 	}
 }
 
-func (l *gormLogger) base() *zap.SugaredLogger {
+func (l *GORM) base() *zap.SugaredLogger {
 	return S().WithOptions(zap.AddCallerSkip(2))
 }
