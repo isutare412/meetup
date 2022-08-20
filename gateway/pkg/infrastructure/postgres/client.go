@@ -4,14 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"time"
 
 	"github.com/isutare412/meetup/gateway/pkg/config"
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
 	"github.com/isutare412/meetup/gateway/pkg/logger"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	glog "gorm.io/gorm/logger"
 )
 
 type Client struct {
@@ -23,8 +21,8 @@ func NewClient(cfg *config.PostgresConfig) (*Client, error) {
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: &logger.GORM{
-			Level:         glog.Warn,
-			SlowThreshold: 200 * time.Millisecond,
+			Level:         cfg.Log.Level.IntoGORMLogLevel(),
+			SlowThreshold: cfg.Log.SlowQuery,
 		},
 	})
 	if err != nil {

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,7 +20,10 @@ func main() {
 	var cfg *config.Config
 	cfg, err := config.Load(*cfgPath)
 	if err != nil {
-		panic(err)
+		panic(fmt.Errorf("loading config: %w", err))
+	}
+	if err := cfg.Validate(); err != nil {
+		panic(fmt.Errorf("invalid config: %w", err))
 	}
 
 	logger.Init(cfg.Logger)
