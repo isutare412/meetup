@@ -12,6 +12,10 @@ import (
 	"gorm.io/gorm"
 )
 
+type ctxKeyTx struct{}
+
+var txKey ctxKeyTx
+
 type Client struct {
 	db *gorm.DB
 }
