@@ -10,6 +10,14 @@ import (
 	"github.com/isutare412/meetup/gateway/pkg/logger"
 )
 
+// @Tags        Users
+// @Description Create an user.
+// @Router      /api/v1/users [POST]
+// @Param       request body createUserReq true "Request to create an user"
+// @Accept      json
+// @Produce     json
+// @Success     200     {object} createUserResp
+// @Failure     default {object} errorResp "Somethings got wrong"
 func createUser(uSvc port.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
@@ -36,10 +44,17 @@ func createUser(uSvc port.UserService) gin.HandlerFunc {
 
 		var resp createUserResp
 		resp.fromUser(user)
-		c.JSON(http.StatusCreated, &resp)
+		c.JSON(http.StatusOK, &resp)
 	}
 }
 
+// @Tags        Users
+// @Description Get an user.
+// @Router      /api/v1/users/{userId} [GET]
+// @Param       userId path number true "User ID"
+// @Produce     json
+// @Success     200     {object} getUserResp
+// @Failure     default {object} errorResp "Somethings got wrong"
 func getUser(uSvc port.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
@@ -70,6 +85,13 @@ func getUser(uSvc port.UserService) gin.HandlerFunc {
 	}
 }
 
+// @Tags        Users
+// @Description Delete an user.
+// @Router      /api/v1/users/{userId} [DELETE]
+// @Param       userId path number true "User ID"
+// @Produce     json
+// @Success     200     {object} deleteUserResp
+// @Failure     default {object} errorResp "Somethings got wrong"
 func deleteUser(uSvc port.UserService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()

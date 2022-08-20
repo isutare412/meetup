@@ -14,6 +14,9 @@ import (
 
 var cfgPath = flag.String("config", "configs/local/config.yaml", "path to yaml config file")
 
+// @Title Meetup Gateway
+// @Version 1.0
+// @Description API gateway for Meetup project.
 func main() {
 	flag.Parse()
 

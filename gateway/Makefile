@@ -10,6 +10,16 @@ help: ## Display this help.
 
 ##@ Development
 
+.PHONY: tools
+tools: ## Install tools for development.
+	go install github.com/swaggo/swag/cmd/swag@latest
+
+.PHONY: docs
+docs: ## Generate swagger docs.
+	swag init \
+		-d "${ROOTDIR}/cmd,${ROOTDIR}/pkg/controller/http,${ROOTDIR}/pkg/core/domain" \
+		-o ${ROOTDIR}/api
+
 .PHONY: run
 run: ## Run server locally.
 	@go run ./cmd/...

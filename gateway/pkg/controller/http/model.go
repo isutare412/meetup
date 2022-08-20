@@ -25,7 +25,7 @@ type errorResp struct {
 }
 
 type createUserReq struct {
-	Nickname string `json:"nickname"`
+	Nickname string `json:"nickname" example:"redshore"`
 }
 
 func (req *createUserReq) validate() error {
@@ -42,10 +42,10 @@ func (req *createUserReq) intoDTO() *dto.CreateUserReq {
 }
 
 type createUserResp struct {
-	ID        int64     `json:"id"`
-	Nickname  string    `json:"nickname"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID        int64     `json:"id" example:"412"`
+	Nickname  string    `json:"nickname" example:"redshore"`
+	CreatedAt time.Time `json:"createdAt" example:"2022-08-20T18:54:53.965295+09:00"`
+	UpdatedAt time.Time `json:"updatedAt" example:"2022-08-20T18:54:53.965295+09:00"`
 }
 
 func (resp *createUserResp) fromUser(user *domain.User) {
@@ -56,10 +56,10 @@ func (resp *createUserResp) fromUser(user *domain.User) {
 }
 
 type getUserResp struct {
-	ID        int64     `json:"id"`
-	Nickname  string    `json:"nickname"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	ID        int64     `json:"id" example:"412"`
+	Nickname  string    `json:"nickname" example:"redshore"`
+	CreatedAt time.Time `json:"createdAt" example:"2022-08-20T18:54:53.965295+09:00"`
+	UpdatedAt time.Time `json:"updatedAt" example:"2022-08-20T18:54:53.965295+09:00"`
 }
 
 func (resp *getUserResp) fromUser(user *domain.User) {
@@ -70,5 +70,5 @@ func (resp *getUserResp) fromUser(user *domain.User) {
 }
 
 type deleteUserResp struct {
-	ID int64 `json:"id"`
+	ID int64 `json:"id" example:"412"`
 }
