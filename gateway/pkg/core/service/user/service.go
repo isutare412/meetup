@@ -10,14 +10,14 @@ import (
 )
 
 type Service struct {
-	repoSession port.RepositorySession
-	userRepo    port.UserRepository
+	repoSess port.RepositorySession
+	userRepo port.UserRepository
 }
 
 func NewService(repoSession port.RepositorySession, userRepo port.UserRepository) *Service {
 	return &Service{
-		repoSession: repoSession,
-		userRepo:    userRepo,
+		repoSess: repoSession,
+		userRepo: userRepo,
 	}
 }
 
@@ -26,7 +26,7 @@ func (s *Service) Create(ctx context.Context, req *dto.CreateUserReq) (user *dom
 		return nil, err
 	}
 
-	ctxWithTx, commit, rollback := s.repoSession.BeginTx(ctx)
+	ctxWithTx, commit, rollback := s.repoSess.BeginTx(ctx)
 	defer func() { err = pkgerr.TryRollback(err, rollback) }()
 
 	user = req.IntoUser()
@@ -40,17 +40,30 @@ func (s *Service) Create(ctx context.Context, req *dto.CreateUserReq) (user *dom
 	return user, nil
 }
 
-func (s *Service) GetByID(ctx context.Context, id int64) (*domain.User, error) {
-	var user *domain.User
-	user, err := s.userRepo.GetByID(ctx, id)
+func (s *Service) GetByID(ctx context.Context, id int64) (user *domain.User, err error) {
+	ctxWithTx, commit, rollback := s.repoSess.BeginTx(ctx)
+	defer func() { err = pkgerr.TryRollback(err, rollback) }()
+
+	user, err = s.userRepo.GetByID(ctxWithTx, id)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := commit(); err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (s *Service) DeleteByID(ctx context.Context, id int64) error {
-	if err := s.userRepo.DeleteByID(ctx, id); err != nil {
+func (s *Service) DeleteByID(ctx context.Context, id int64) (err error) {
+	ctxWithTx, commit, rollback := s.repoSess.BeginTx(ctx)
+	defer func() { err = pkgerr.TryRollback(err, rollback) }()
+
+	if err := s.userRepo.DeleteByID(ctxWithTx, id); err != nil {
+		return err
+	}
+
+	if err := commit(); err != nil {
 		return err
 	}
 	return nil
