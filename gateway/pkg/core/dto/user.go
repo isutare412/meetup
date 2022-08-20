@@ -4,15 +4,16 @@ import (
 	"fmt"
 
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
+	"github.com/isutare412/meetup/gateway/pkg/pkgerr"
 )
 
 type CreateUserReq struct {
 	Nickname string
 }
 
-func (r *CreateUserReq) IsValid() error {
+func (r *CreateUserReq) Validate() error {
 	if r.Nickname == "" {
-		return fmt.Errorf("empty nickname is not allowed")
+		return pkgerr.Known{Simple: fmt.Errorf("empty nickname is not allowed")}
 	}
 	return nil
 }

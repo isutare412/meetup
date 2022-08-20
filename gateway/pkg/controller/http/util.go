@@ -1,6 +1,9 @@
 package http
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/isutare412/meetup/gateway/pkg/pkgerr"
+)
 
 const (
 	ctxKeyError = "ctx-key-error"
@@ -8,8 +11,13 @@ const (
 
 func responseError(c *gin.Context, code int, err error) {
 	injectError(c, err)
+
+	var errMsg = err.Error()
+	if kerr := pkgerr.AsKnown(err); kerr != nil {
+		errMsg = kerr.SimpleError()
+	}
 	c.JSON(code, &errorResp{
-		Msg: err.Error(),
+		Msg: errMsg,
 	})
 }
 

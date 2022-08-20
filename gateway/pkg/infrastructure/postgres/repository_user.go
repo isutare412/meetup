@@ -2,12 +2,10 @@ package postgres
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
 	"github.com/isutare412/meetup/gateway/pkg/pkgerr"
-	"gorm.io/gorm"
 )
 
 type UserRepository struct {
@@ -24,7 +22,16 @@ func (r *UserRepository) Create(ctx context.Context, user *domain.User) error {
 	db := r.cli.extractTxOrDB(ctx)
 
 	if err := db.Create(user).Error; err != nil {
-		return err
+		if k, v := isErrDuplicateKey(err); k != "" {
+			return pkgerr.Known{
+				Origin: err,
+				Simple: fmt.Errorf("cannot create user due to duplicate(%s=%s)", k, v),
+			}
+		}
+		return pkgerr.Known{
+			Origin: err,
+			Simple: fmt.Errorf("failed to create user"),
+		}
 	}
 	return nil
 }
@@ -34,7 +41,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*domain.User, e
 
 	var user = domain.User{ID: id}
 	if err := db.First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		if isErrRecordNotFound(err) {
 			return nil, pkgerr.Known{
 				Simple: fmt.Errorf("user(id=%d) not found", id),
 			}
@@ -49,7 +56,10 @@ func (r *UserRepository) DeleteByID(ctx context.Context, id int64) error {
 
 	res := db.Delete(&domain.User{ID: id})
 	if err := res.Error; err != nil {
-		return err
+		return pkgerr.Known{
+			Origin: err,
+			Simple: fmt.Errorf("cannot delete user"),
+		}
 	}
 	if res.RowsAffected != 1 {
 		return pkgerr.Known{
