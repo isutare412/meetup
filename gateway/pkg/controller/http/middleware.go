@@ -61,8 +61,8 @@ func accessLog(c *gin.Context) {
 		zap.Int64("elapsedTime", time.Since(start).Milliseconds()),
 	)
 
-	if errAny, exists := c.Get(ctxKeyError); exists {
-		log = log.With(zap.NamedError("errorMsg", errAny.(error)))
+	if err := extractError(c); err != nil {
+		log = log.With(zap.NamedError("errorMsg", err))
 	}
 
 	log.Info("HTTP access")
