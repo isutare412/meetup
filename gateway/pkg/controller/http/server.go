@@ -22,7 +22,12 @@ func NewServer(cfg *config.HTTPServerConfig, uSvc port.UserService) *Server {
 
 	api := root.Group("/api/v1")
 	api.Use(accessLog)
-	api.GET("/playground/:id", playground)
+
+	api.POST("/users", createUser(uSvc))
+	api.GET("/users/:userId", getUser(uSvc))
+	api.DELETE("/users/:userId", deleteUser(uSvc))
+
+	api.GET("/playground/:id", playground(uSvc))
 
 	return &Server{
 		srv: &http.Server{

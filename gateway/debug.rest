@@ -1,6 +1,26 @@
 @url=http://localhost:28420
 
 ###
+# Create user
+###
+POST {{url}}/api/v1/users
+Content-Type: application/json
+
+{
+  "nickname": "redshore"
+}
+
+###
+# Get user
+###
+GET {{url}}/api/v1/users/1
+
+###
+# Delete user
+###
+DELETE  {{url}}/api/v1/users/22
+
+###
 # Playground
 ###
 GET {{url}}/api/v1/playground/foo
