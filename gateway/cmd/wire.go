@@ -19,14 +19,18 @@ type components struct {
 func newComponents(ctx context.Context, cfg *config.Config) (*components, error) {
 	success := make(chan *components, 1)
 	fails := make(chan error, 1)
-	go func() {
+	go func() (err error) {
+		defer func() {
+			if err != nil {
+				fails <- err
+			}
+		}()
 		logger.S().Info("Dependency injection start")
 
 		var pgClient *postgres.Client
-		pgClient, err := postgres.NewClient(cfg.Postgres)
+		pgClient, err = postgres.NewClient(ctx, cfg.Postgres)
 		if err != nil {
-			fails <- err
-			return
+			return err
 		}
 		userRepo := postgres.NewUserRepository(pgClient)
 
@@ -39,6 +43,7 @@ func newComponents(ctx context.Context, cfg *config.Config) (*components, error)
 			pgClient:   pgClient,
 			httpServer: httpServer,
 		}
+		return nil
 	}()
 
 	var components *components

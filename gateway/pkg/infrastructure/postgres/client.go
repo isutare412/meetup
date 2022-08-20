@@ -16,7 +16,7 @@ type Client struct {
 	db *gorm.DB
 }
 
-func NewClient(cfg *config.PostgresConfig) (*Client, error) {
+func NewClient(ctx context.Context, cfg *config.PostgresConfig) (*Client, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -27,6 +27,12 @@ func NewClient(cfg *config.PostgresConfig) (*Client, error) {
 	})
 	if err != nil {
 		return nil, err
+	}
+
+	if sqlDB, err := db.DB(); err != nil {
+		return nil, fmt.Errorf("getting *sql.DB from GORM: %w", err)
+	} else if err := sqlDB.PingContext(ctx); err != nil {
+		return nil, fmt.Errorf("pinging DB: %w", err)
 	}
 
 	return &Client{

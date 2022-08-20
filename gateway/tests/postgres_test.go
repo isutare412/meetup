@@ -15,7 +15,7 @@ func TestPostgresCRUD(t *testing.T) {
 	require.NoError(t, err)
 
 	var cli *postgres.Client
-	cli, err = postgres.NewClient(cfg.Postgres)
+	cli, err = postgres.NewClient(context.Background(), cfg.Postgres)
 	require.NoError(t, err)
 
 	err = cli.MigrateSchema(context.Background())
