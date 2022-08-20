@@ -10,6 +10,9 @@ type Config struct {
 }
 
 func (c *Config) Validate() error {
+	if err := c.Logger.Format.Validate(); err != nil {
+		return err
+	}
 	if err := c.Postgres.Log.Level.Validate(); err != nil {
 		return err
 	}

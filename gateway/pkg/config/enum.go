@@ -13,6 +13,16 @@ const (
 	LogFormatText LogFormat = "text"
 )
 
+func (lf LogFormat) Validate() error {
+	switch lf {
+	case LogFormatJson:
+	case LogFormatText:
+	default:
+		return fmt.Errorf("unknown logFormat(%s)", lf)
+	}
+	return nil
+}
+
 type PostgresLogLevel string
 
 const (
