@@ -6,7 +6,7 @@ import (
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
 	"github.com/isutare412/meetup/gateway/pkg/core/dto"
 	"github.com/isutare412/meetup/gateway/pkg/core/port"
-	pkgerr "github.com/isutare412/meetup/gateway/pkg/error"
+	"github.com/isutare412/meetup/gateway/pkg/pkgerr"
 )
 
 type Service struct {

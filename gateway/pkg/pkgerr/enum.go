@@ -3,6 +3,6 @@ package pkgerr
 type Errno int32
 
 const (
-	ErrnoNone Errno = iota
+	ErrnoInternal Errno = iota
 	ErrnoEntityNotFound
 )

@@ -28,6 +28,7 @@ func readFile(path string) error {
 }
 
 func readEnv() {
+	// GATEWAY_FOO_BAR=baz -> cfg.Foo.Bar = "baz"
 	viper.SetEnvPrefix("gateway")
 	viper.AutomaticEnv()
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))

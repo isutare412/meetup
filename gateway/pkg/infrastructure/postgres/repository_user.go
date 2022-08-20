@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/isutare412/meetup/gateway/pkg/core/domain"
-	pkgerr "github.com/isutare412/meetup/gateway/pkg/error"
+	"github.com/isutare412/meetup/gateway/pkg/pkgerr"
 	"gorm.io/gorm"
 )
 
@@ -36,8 +36,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*domain.User, e
 	if err := db.First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, pkgerr.Known{
-				Errno:  pkgerr.ErrnoEntityNotFound,
-				Source: fmt.Errorf("user(id=%d) not found", id),
+				Simple: fmt.Errorf("user(id=%d) not found", id),
 			}
 		}
 		return nil, err
@@ -54,8 +53,7 @@ func (r *UserRepository) DeleteByID(ctx context.Context, id int64) error {
 	}
 	if res.RowsAffected != 1 {
 		return pkgerr.Known{
-			Errno:  pkgerr.ErrnoEntityNotFound,
-			Source: fmt.Errorf("user(id=%d) not found", id),
+			Simple: fmt.Errorf("user(id=%d) not found", id),
 		}
 	}
 	return nil
