@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	// Format: Key ({column})=({value}) already exists.
 	regexDuplicate = regexp.MustCompile(`\(([^\s]+)\)=\(([^\s]+)\)`)
 )
 
