@@ -9,7 +9,22 @@ module.exports = {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ['corporate', 'business'],
+    themes: [
+      {
+        corporate: {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          ...require('daisyui/src/colors/themes')['[data-theme=corporate]'],
+          '--btn-text-case': '',
+        },
+      },
+      {
+        business: {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          ...require('daisyui/src/colors/themes')['[data-theme=business]'],
+          '--btn-text-case': '',
+        },
+      },
+    ],
     darkTheme: 'business',
   },
 }
