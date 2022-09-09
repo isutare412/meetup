@@ -18,9 +18,11 @@ const NavBar: NextPage = () => {
     <div className="fixed z-10 top-0 w-full bg-base-100 border-b border-slate-300/40 dark:border-slate-300/20">
       <div className="flex justify-between max-w-5xl mx-auto">
         <div>
-          <a href="/" role="button" className="btn btn-ghost text-xl">
-            Meetup
-          </a>
+          <Link href="/">
+            <a role="button" className="btn btn-ghost text-xl">
+              Meetup
+            </a>
+          </Link>
         </div>
         <div>
           {navigations.map(({ name, href }) => (
