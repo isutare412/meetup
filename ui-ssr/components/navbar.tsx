@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
 import Link from 'next/link'
+import Octocat from '@components/icon/octocat'
 
 const NavBar: NextPage = () => {
   const navigations = [
@@ -28,7 +29,15 @@ const NavBar: NextPage = () => {
             </Link>
           ))}
         </div>
-        <div></div>
+        <div className="flex content-center">
+          <a
+            href="https://github.com/isutare412"
+            role="button"
+            className="btn btn-link btn-sm px-0 my-auto mr-2 text-base-content hover:text-gray-500"
+          >
+            <Octocat width={30} height={30} className="fill-current" />
+          </a>
+        </div>
       </div>
     </div>
   )
