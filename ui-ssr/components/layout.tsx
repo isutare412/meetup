@@ -8,10 +8,7 @@ const Layout: NextPage<{ children: ReactElement }> = ({ children }) => (
     <Head>
       <title>Meetup</title>
     </Head>
-    <NavBar />
-    <div className="border-x border-slate-300/40 dark:border-slate-300/20 max-w-5xl p-4 pt-16 mx-auto min-h-screen">
-      <main>{children}</main>
-    </div>
+    <NavBar>{children}</NavBar>
   </>
 )
 
