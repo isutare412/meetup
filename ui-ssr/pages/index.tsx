@@ -2,9 +2,9 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useState } from 'react'
 
-const Header: NextPage<{ title: string }> = ({ title }) => {
-  return <h1 className="text-2xl">{title ? title : 'Default title'}</h1>
-}
+const Header: NextPage<{ title: string }> = ({ title }) => (
+  <h1 className="text-2xl">{title ? title : 'Default title'}</h1>
+)
 
 const Home: NextPage = () => {
   const names = ['Ada Lovelace', 'Grace Hopper', 'Margaret Hamilton']
